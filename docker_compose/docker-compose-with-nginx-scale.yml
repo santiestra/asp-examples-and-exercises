@@ -1,0 +1,37 @@
+version: '3.1'
+networks:
+  example-network:
+services:
+  example-api:
+    build: .
+    depends_on:
+      - postgres
+    networks:
+      - example-network
+    command: ["./wait_for_it.sh", "example-database:5432", "--", "node", "index.js"]
+  postgres:
+    image: postgres
+    container_name: example-database
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - /var/lib/postgresql
+    ports:
+      - 5432:5432
+    networks:
+      - example-network
+  nginx:
+    image: nginx
+    container_name: nginx-example
+    ports:
+      - 3535:80
+    depends_on:
+      - example-api
+    networks:
+      - example-network
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./var/log/nginx:/var/log/nginx
+
