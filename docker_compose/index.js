@@ -29,6 +29,21 @@ app.get('/tasks', async (req, res) => {
   }
 })
 
+app.get('/tasks/:id', async (req, res) => {
+  try {
+    const task = await Task.findOne({ where: { id: req.params.id  }})
+    if (task) {
+      res.json({ task });
+    } else {
+      res.status(404)
+      res.json({ error: 'Not found' });
+      return;
+    }
+  } catch (error) {
+    res.json({ error })
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)

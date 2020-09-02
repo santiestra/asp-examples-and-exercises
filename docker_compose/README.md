@@ -28,6 +28,7 @@ Corremos
 
 ### Multiples instancias de Api + Nginx + Base
 Nginx: https://www.nginx.com/
+Docker Scale, Docker Swarm: https://docs.docker.com/engine/reference/commandline/service_scale/
 
 Archivo `docker-compose-with-nginx-scale.yml`
 Configuracion Nginx: `nginx.conf`
