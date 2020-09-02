@@ -7,12 +7,13 @@ WORKDIR /usr/src/app
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 COPY package*.json ./
-
 RUN npm install
 
 # Copy app source
 COPY . .
-# RUN chmod +x wait-for-it.sh
+
+COPY wait_for_it.sh ./
+RUN chmod +x wait_for_it.sh
 
 EXPOSE 3456
 CMD [ "npm", "start" ]

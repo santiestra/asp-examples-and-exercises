@@ -1,6 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const { Task } = require('./models');
+const { Task } = require('./src/models');
 
 const app = express()
 const port = 3456
