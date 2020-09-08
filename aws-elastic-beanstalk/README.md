@@ -3,6 +3,9 @@
 ## AWS Educate
 [Guia de registro](https://github.com/pablovilas/asp-course-examples/blob/master/2020/s2/s2c2/AWSEducate.md)
 
+## Creacion de la base de datos:
+[Creacion base RDS](RDS.md)
+
 ## Beanstalk
 
 ### Creando la aplicacion
