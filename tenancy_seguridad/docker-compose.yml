@@ -1,0 +1,31 @@
+version: '3.1'
+networks:
+  example-network:
+services:
+
+  example-api:
+    build: .
+    ports:
+      - "3456:3456"
+    environment:
+      DATABASE_URI: "postgres://postgres:password@example-database:5432/postgres"
+    depends_on:
+      - postgres
+    networks:
+      - example-network
+    command: ["./wait_for_it.sh", "example-database:5432", "--", "node", "index.js"]
+
+
+  postgres:
+    image: postgres
+    container_name: example-database
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - /var/lib/postgresql
+    ports:
+      - 5432:5432
+    networks:
+      - example-network
