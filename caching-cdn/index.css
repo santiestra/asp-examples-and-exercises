@@ -1,0 +1,9 @@
+body {
+  background-color: #661020;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
