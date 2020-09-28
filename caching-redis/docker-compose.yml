@@ -1,0 +1,59 @@
+version: "3.8"
+networks:
+  example-network:
+services:
+  example-api:
+    build: .
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DATABASE_URI: "postgres://postgres:password@example-database-cache:5432/postgres"
+      REDIS_URI: "redis://redis-cache-asp:6379"
+      JWT_SECRET: "some_secret_here-123423341213"
+    networks:
+      - example-network
+    command:
+      [
+        "./wait_for_it.sh",
+        "example-database-cache:5432",
+        "--",
+        "node",
+        "index.js",
+      ]
+
+  postgres:
+    image: postgres:12.4
+    container_name: example-database-cache
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - /var/lib/postgresql
+    ports:
+      - 5432:5432
+    networks:
+      - example-network
+
+  redis:
+    image: redis:6.0.8-alpine
+    container_name: redis-cache-asp
+    ports:
+      - 6379:6379
+    restart: always
+    networks:
+      - example-network
+
+  nginx:
+    image: nginx
+    container_name: nginx-example-cache
+    ports:
+      - 3535:80
+    depends_on:
+      - example-api
+    networks:
+      - example-network
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./var/log/nginx:/var/log/nginx
