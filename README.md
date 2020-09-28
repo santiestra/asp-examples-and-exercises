@@ -7,3 +7,5 @@
 3. [AWS - ECS](aws-ecs)
 4. [SaaS - Tenancy y Seguridad](tenancy_seguridad)
 5. [Performance Testing - JMeter](perf-testing-jmeter)
+6. [Caching - Redis](caching-redis)
+7. [Caching - CDN](caching-cdn)
