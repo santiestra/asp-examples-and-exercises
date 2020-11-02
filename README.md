@@ -10,3 +10,4 @@
 6. [Caching - Redis](caching-redis)
 7. [Caching - CDN](caching-cdn)
 8. [Microservices - Chassis/Template para node y express](https://github.com/santiestra/node-chassis-asp-example)
+9. [Microservices - Auth Token entre servicios y API Gateway (Kong)](https://github.com/santiestra/example-auth-ms)
