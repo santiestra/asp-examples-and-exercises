@@ -5,7 +5,6 @@ const { JWT_SECRET } = require("./src/constants");
 const { Task, User } = require("./src/models");
 const { authenticateUserToken } = require("./src/middlewares");
 const cache = require("./lib/cache");
-const e = require("express");
 
 const app = express();
 const port = 3456;
@@ -57,7 +56,14 @@ app.post("/tasks", authenticateUserToken, async (req, res) => {
       completed: false,
       OrganizationId: organizationId,
     });
-    cache.del(`tasks-${organizationId}`)
+
+    const cacheKey = `tasks-${organizationId}`;
+
+    cache.get(cacheKey, (error, cachedData) => {
+      const data = JSON.parse(cachedData);
+      const newData = [...data, task];
+      cache.set(cacheKey, JSON.stringify(newData));
+    });
 
     res.json(task);
   } catch (error) {
@@ -68,18 +74,18 @@ app.post("/tasks", authenticateUserToken, async (req, res) => {
 app.get("/tasks", authenticateUserToken, async (req, res) => {
   try {
     const organizationId = req.organizationId;
+
     const cacheKey = `tasks-${organizationId}`;
-    cache.get(cacheKey, async (error, cachedTasks) => {
-      if (error) res.json({ error });
-      if (cachedTasks) {
-        res.json(JSON.parse(cachedTasks));
+    cache.get(cacheKey, async (error, cachedData) => {
+      if (error) res.json({ error })
+      if (cachedData) {
+        res.json(JSON.parse(cachedData));
       } else {
-        console.log("QUERYING DB");
         const tasks = await Task.findAll({
           where: { OrganizationId: organizationId },
         });
 
-        cache.set(cacheKey, JSON.stringify(tasks), 'EX', 200000);
+        cache.set(cacheKey, JSON.stringify(tasks));
         res.json(tasks);
       }
     });
